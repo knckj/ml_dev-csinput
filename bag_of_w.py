@@ -1,7 +1,5 @@
 
 
-
-from unicodedata import category
 import pandas as pd
 
 import csv
@@ -45,11 +43,27 @@ def counting(input_dict):
                 counted[key].append(word_counts)
     return counted
 
+def probability(counted):
+    list_to_csv_1 =[]
+    for key, value in counted.items():
+        for counts in value:
+            (word, count) = counts
+            list_to_csv = []
+            list_to_csv.append(word)
+            list_to_csv.append(count)
+            list_to_csv.append(key)
+            list_to_csv_1.append(list_to_csv)
+
+    df = pd.DataFrame.from_records(list_to_csv_1)
+    df.to_csv('word-count-key.csv')
+
+
 
 def main():
     df = get_data('cleaned-dalej.csv')
     df_2 = bag_of_words(df)
-    counting(df_2)
+    df_3 = counting(df_2)
+    probability(df_3)
 
 if __name__ == '__main__':
     main()
