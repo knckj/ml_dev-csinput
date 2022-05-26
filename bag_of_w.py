@@ -7,7 +7,7 @@ import csv
 def get_data(filename):
     
     df = []
-    with open(filename, "r", encoding='utf8') as f:
+    with open(filename, "r", encoding='ISO-8859-1') as f:
         f_reader = csv.reader(f, delimiter=';')
         
         for row in f_reader:
@@ -46,21 +46,26 @@ def counting(input_dict):
 def probability(counted):
     list_to_csv_1 =[]
     for key, value in counted.items():
+        all_count = 0
+        for counts in value:
+            (word, count) = counts
+            all_count += count
         for counts in value:
             (word, count) = counts
             list_to_csv = []
             list_to_csv.append(word)
             list_to_csv.append(count)
             list_to_csv.append(key)
+            list_to_csv.append(all_count)
             list_to_csv_1.append(list_to_csv)
 
     df = pd.DataFrame.from_records(list_to_csv_1)
-    df.to_csv('word-count-key.csv')
+    pd.DataFrame.from_records(df).to_excel('word-count-key.xlsx',encoding='utf8',index=False)
 
 
 
 def main():
-    df = get_data('cleaned-dalej.csv')
+    df = get_data('cleaned-v2.csv')
     df_2 = bag_of_words(df)
     df_3 = counting(df_2)
     probability(df_3)
